@@ -59,6 +59,7 @@
             </div>
         </div>
     </div>
+    @include('livewire.referensi.modal.tambah-rombel')
     @include('livewire.referensi.modal.anggota-rombel')
     @include('livewire.referensi.modal.pembelajaran')
     @include('components.loader')
@@ -67,6 +68,12 @@
 <script>
     Livewire.on('show-pembelajaran', event => {
         $('#pembelajaranModal').modal('show');
+    })
+    Livewire.on('tambahModal', event => {
+        $('#tambahModal').modal('show');
+    })
+    Livewire.on('close-modal', event => {
+        $('#tambahModal').modal('hide');
     })
 </script>
 @endpush

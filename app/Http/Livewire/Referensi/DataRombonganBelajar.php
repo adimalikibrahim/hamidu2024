@@ -12,6 +12,7 @@ use App\Models\Pembelajaran;
 use App\Models\Anggota_rombel;
 use App\Models\Guru;
 use App\Models\Kelompok;
+use App\Models\Jurusan_sp;
 
 class DataRombonganBelajar extends Component
 {
@@ -57,6 +58,7 @@ class DataRombonganBelajar extends Component
             $query->where('semester_id', session('semester_aktif'));
             $query->where('sekolah_id', session('sekolah_id'));
         };
+        $this->pengajar = Guru::all();
         return view('livewire.referensi.data-rombongan-belajar', [
             'collection' => Rombongan_belajar::where($where)->with([
                 'wali_kelas' => function($query){
@@ -86,9 +88,20 @@ class DataRombonganBelajar extends Component
             })->paginate($this->per_page),
             'breadcrumbs' => [
                 ['link' => "/", 'name' => "Beranda"], ['link' => '#', 'name' => 'Referensi'], ['name' => "Data Rombongan Belajar"]
-            ]
+            ],
+            'tombol_add' => [
+                'wire' => 'tambahModal',
+                'color' => 'primary',
+                'text' => 'Tambah Data',
+            ],
         ]);
     }
+
+    public function tambahModal(){
+        $this->pengajar = Guru::all();
+        $this->emit('tambahModal');
+    }
+
     public function getAnggota($rombongan_belajar_id){
         $this->rombongan_belajar_id = $rombongan_belajar_id;
         $this->anggota_rombel = Peserta_didik::with(['anggota_rombel' => function($query) use ($rombongan_belajar_id){
