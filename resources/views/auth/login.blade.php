@@ -17,7 +17,7 @@ $configData = Helper::applClasses();
     <!-- Brand logo-->
     <a class="brand-logo" href="{{url('/')}}">
       <!--img src="{{asset('images/tutwuri.png')}}" alt="logo" srcset="" style="height:50px"-->
-      <img class="img-fluid" src="{{asset('images/logo-name.svg')}}" alt="{{config('app.name')}}" style="height:50px" />
+      <img class="img-fluid" src="{{asset('images/logo.png')}}" alt="{{config('app.name')}}" style="height:50px" />
     </a>
     <!-- /Brand logo-->
 
@@ -32,7 +32,7 @@ $configData = Helper::applClasses();
     <!-- Login-->
     <div class="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5 border-start">
       <div class="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
-            <h1 class="brand-text judul ms-1 text-center">
+            <h1 class="brand-text judul text-center">
               <img src="{{asset('images/logo.png')}}" alt="logo" srcset="" style="height:28px">
               {{config('app.name')}}
             </h1>

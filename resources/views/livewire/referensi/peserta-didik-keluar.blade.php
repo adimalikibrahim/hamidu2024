@@ -8,8 +8,9 @@
                     <thead>
                         <tr>
                             <th class="text-center">Nama</th>
+                            <th class="text-center">NIK</th>
                             <th class="text-center">L/P</th>
-                            <th class="text-center">Tempat, Tanggal Lahir</th>
+                            <th class="text-center">Kordinator</th>
                             <th class="text-center">Email</th>
                         </tr>
                     </thead>
@@ -18,8 +19,9 @@
                             @foreach($collection as $item)
                             <tr>
                                 <td>{{$item->nama}}</td>
+                                <td class="text-center">{{$item->nik}}</td>
                                 <td class="text-center">{{$item->jenis_kelamin}}</td>
-                                <td>{{$item->tempat_lahir}}, {{$item->tanggal_lahir}}</td>
+                                <td>{{($item->anggota_rombel) ? $item->anggota_rombel->rombongan_belajar->nama : '-'}}</td>
                                 <td>{{$item->email}}</td>
                             </tr>
                             @endforeach

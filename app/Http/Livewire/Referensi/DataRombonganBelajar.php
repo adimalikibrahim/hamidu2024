@@ -13,6 +13,7 @@ use App\Models\Anggota_rombel;
 use App\Models\Guru;
 use App\Models\Kelompok;
 use App\Models\Jurusan_sp;
+use App\Models\Pd_keluar;
 
 class DataRombonganBelajar extends Component
 {
@@ -221,7 +222,14 @@ class DataRombonganBelajar extends Component
     }
     public function confirmed_delete(){
         $a = Anggota_rombel::find($this->anggota_rombel_id);
-        $a->delete();
+        Pd_keluar::Create([
+            'pd_keluar_id'      => Str::uuid(),
+            'peserta_didik_id'  => $a->peserta_didik_id,
+            'sekolah_id'        => session('sekolah_id'),
+            'semester_id'       => '20241',
+            'last_sync'			=> now(),
+        ]);
+        $b = Anggota_rombel::find($this->anggota_rombel_id)->delete();
         $this->alert('success', 'Anggota Rombel berhasil dikeluarkan', [
             'showConfirmButton' => true,
             'confirmButtonText' => 'OK',

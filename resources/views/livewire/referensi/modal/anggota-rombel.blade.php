@@ -13,10 +13,10 @@
                             <tr>
                                 <th class="text-center">No</th>
                                 <th class="text-center">Nama</th>
-                                <th class="text-center">NISN</th>
+                                <th class="text-center">NIK</th>
                                 <th class="text-center">L/P</th>
-                                <th class="text-center">Tempat, Tanggal Lahir</th>
-                                <th class="text-center">Agama</th>
+                                {{-- <th class="text-center">Tempat, Tanggal Lahir</th> --}}
+                                {{-- <th class="text-center">Agama</th> --}}
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -25,11 +25,11 @@
                             <tr>
                                 <td class="text-center">{{$no + 1}}</td>
                                 <td>{{$item->nama}}</td>
-                                <td class="text-center">{{$item->nisn}}</td>
+                                <td class="text-center">{{$item->nik}}</td>
                                 <td class="text-center">{{$item->jenis_kelamin}}</td>
-                                <td>{{$item->tempat_lahir}}, {{$item->tanggal_lahir}}</td>
-                                <td>{{$item->agama->nama}}</td>
-                                <td>
+                                {{-- <td>{{$item->tempat_lahir}}, {{$item->tanggal_lahir}}</td> --}}
+                                {{-- <td>{{$item->agama->nama}}</td> --}}
+                                <td class="text-center">
                                     <button type="button" class="btn btn-sm btn-danger waves-effect waves-float waves-light" wire:click="keluarkanAnggota('{{$item->anggota_rombel->anggota_rombel_id}}', '{{$item->anggota_rombel->rombongan_belajar_id}}')">Keluarkan</button>
                                 </td>
                             </tr>

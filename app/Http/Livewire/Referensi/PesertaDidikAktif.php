@@ -102,7 +102,7 @@ class PesertaDidikAktif extends Component
             ->when($this->search, function($query) {
                 $query->where('nama', 'ILIKE', '%' . $this->search . '%');
                 $query->whereHas('anggota_rombel', $this->kondisi());
-                $query->orWhere('nisn', 'ILIKE', '%' . $this->search . '%');
+                $query->orWhere('nik', 'ILIKE', '%' . $this->search . '%');
                 $query->whereHas('anggota_rombel', $this->kondisi());
                 $query->orWhereHas('agama', function($query){
                     $query->where('nama', 'ILIKE', '%' . $this->search . '%');
@@ -110,18 +110,18 @@ class PesertaDidikAktif extends Component
                 $query->whereHas('anggota_rombel', $this->kondisi());
                 $query->orWhere('tempat_lahir', 'ILIKE', '%' . $this->search . '%');
                 $query->whereHas('anggota_rombel', $this->kondisi());
-            })->when($this->filter_tingkat, function($query){
-                $query->whereHas('anggota_rombel', function($query){
-                    $query->wherehas('rombongan_belajar', function($query){
-                        $query->where('tingkat', $this->filter_tingkat);
-                    });
-                });
-            })->when($this->filter_jurusan, function($query){
-                $query->whereHas('anggota_rombel', function($query){
-                    $query->wherehas('rombongan_belajar', function($query){
-                        $query->where('jurusan_sp_id', $this->filter_jurusan);
-                    });
-                });
+            // })->when($this->filter_tingkat, function($query){
+            //     $query->whereHas('anggota_rombel', function($query){
+            //         $query->wherehas('rombongan_belajar', function($query){
+            //             $query->where('tingkat', $this->filter_tingkat);
+            //         });
+            //     });
+            // })->when($this->filter_jurusan, function($query){
+            //     $query->whereHas('anggota_rombel', function($query){
+            //         $query->wherehas('rombongan_belajar', function($query){
+            //             $query->where('jurusan_sp_id', $this->filter_jurusan);
+            //         });
+            //     });
             })->when($this->filter_rombel, function($query){
                 $query->whereHas('anggota_rombel', function($query){
                     $query->where('rombongan_belajar_id', $this->filter_rombel);
@@ -442,9 +442,9 @@ class PesertaDidikAktif extends Component
         }
         $this->emit('progress');
     }
-    public function getRombel(){
-        $find = Rombongan_belajar::find($this->rombongan_belajar_id);
-        $this->nama_kelas = $find->nama;
-        $this->guru_pengajar = Guru::where('sekolah_id', session('sekolah_id'))->orderBy('nama')->get();
-    }
+    // public function getRombel(){
+    //     $find = Rombongan_belajar::find($this->rombongan_belajar_id);
+    //     $this->nama_kelas = $find->nama;
+    //     $this->guru_pengajar = Guru::where('sekolah_id', session('sekolah_id'))->orderBy('nama')->get();
+    // }
 }
