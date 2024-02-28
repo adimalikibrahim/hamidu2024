@@ -103,20 +103,28 @@ class DataRombonganBelajar extends Component
         $this->emit('tambahModal');
     }
     public function store(){
-        Rombongan_belajar::create([
-            'rombongan_belajar_id' => Str::uuid(),
-            'sekolah_id'        => session('sekolah_id'),
-            'semester_id'       => '20241',
-            'nama'		        => $this->nama_kelas,
-            'guru_id'           => $this->pengajar,
-            'ptk_id'           => $this->pengajar,
-            'jenis_rombel'		=> 1,
-            'last_sync'			=> now(),
-        ]);
-        $this->alert('success', 'Berhasil', [
-            'text' => 'Data Rombel berhasil disimpan!'
-        ]);
-        $this->emit('close-modal');
+        $ketua = Rombongan_belajar::where('guru_id', $this->pengajar)->first();
+        if ($ketua) {
+            $this->emit('close-modal');
+            $this->alert('error', 'Gagal', [
+                'text' => 'Ketua Kordinator tidak boleh sama'
+            ]);
+        }else {
+            Rombongan_belajar::create([
+                'rombongan_belajar_id' => Str::uuid(),
+                'sekolah_id'        => session('sekolah_id'),
+                'semester_id'       => '20241',
+                'nama'		        => $this->nama_kelas,
+                'guru_id'           => $this->pengajar,
+                'ptk_id'           => $this->pengajar,
+                'jenis_rombel'		=> 1,
+                'last_sync'			=> now(),
+            ]);
+            $this->alert('success', 'Berhasil', [
+                'text' => 'Data Rombel berhasil disimpan!'
+            ]);
+            $this->emit('close-modal');
+        }
     }
     public function getAnggota($rombongan_belajar_id){
         $this->rombongan_belajar_id = $rombongan_belajar_id;

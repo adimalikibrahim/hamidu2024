@@ -239,7 +239,7 @@ class DataInstruktur extends Component
         $this->tanggal_lahir = $this->guru->tanggal_lahir;
         $this->tanggal_lahir_str = Carbon::createFromTimeStamp(strtotime($this->guru->tanggal_lahir))->translatedFormat('j F Y');
         $this->agama_id = $this->guru->agama_id;
-        $this->alamat = $this->guru->alamat;
+        $this->alamat_jalan = $this->guru->alamat;
         $this->rt = $this->guru->rt;
         $this->rw = $this->guru->rw;
         $this->desa_kelurahan = $this->guru->desa_kelurahan;

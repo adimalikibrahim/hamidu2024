@@ -82,12 +82,19 @@
             </div>
         </div>
     </div>
+    @include('livewire.referensi.modal.import-pd')
     @include('livewire.referensi.modal.detil-pd')
     @include('livewire.referensi.modal.progress')
     @include('components.loader')
 </div>
 @push('scripts')
 <script>
+    Livewire.on('showModal', event => {
+        $('#pdModal').modal('show');
+    })
+    Livewire.on('close-modal', event => {
+        $('#pdModal').modal('hide');
+    })
     Livewire.on('show-modal', event => {
         $('#detilPD').modal('show');
     })
@@ -102,7 +109,7 @@
         $('#filter_jurusan').html('<option value="">== Filter Jurusan ==</option>')
         $('#filter_rombel').html('<option value="">== Filter Rombel ==</option>')
         $.each(event.detail.data_jurusan, function (i, item) {
-            $('#filter_jurusan').append($('<option>', { 
+            $('#filter_jurusan').append($('<option>', {
                 value: item.jurusan_sp_id,
                 text : item.nama_jurusan_sp
             }));
@@ -111,7 +118,7 @@
     window.addEventListener('data_rombel', event => {
         $('#filter_rombel').html('<option value="">== Filter Rombel ==</option>')
         $.each(event.detail.data_rombel, function (i, item) {
-            $('#filter_rombel').append($('<option>', { 
+            $('#filter_rombel').append($('<option>', {
                 value: item.rombongan_belajar_id,
                 text : item.nama
             }));

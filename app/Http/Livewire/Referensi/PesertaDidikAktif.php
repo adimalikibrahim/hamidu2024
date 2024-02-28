@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Referensi;
 
+use App\Models\Anggota_rombel;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Livewire\Component;
 use App\Models\Peserta_didik;
 use App\Models\Rombongan_belajar;
@@ -15,17 +17,19 @@ use App\Models\Pekerjaan;
 use App\Models\User;
 use App\Models\Role;
 use Carbon\Carbon;
+use Rap2hpoutre\FastExcel\FastExcel;
+
 
 class PesertaDidikAktif extends Component
 {
-    use WithPagination, LivewireAlert;
+    use WithPagination, WithFileUploads, LivewireAlert;
     protected $paginationTheme = 'bootstrap';
     public $search = '';
-    
+
     private function loggedUser(){
         return auth()->user();
     }
-    
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -41,11 +45,11 @@ class PesertaDidikAktif extends Component
     public $sortbydesc = 'ASC';
     public $per_page = 10;
     public $rombongan_belajar_id;
-    public $data = 'Peserta Didik';
+    public $data = 'pd';
     public $pd_id,
         $pd,
         $nama,
-        $nis, 
+        $nis,
         $nisn,
         $nik,
         $jenis_kelamin,
@@ -55,6 +59,8 @@ class PesertaDidikAktif extends Component
         $anak_ke,
         $alamat,
         $rt_rw,
+        $rt,
+        $rw,
         $desa_kelurahan,
         $kecamatan,
         $kode_pos,
@@ -75,7 +81,12 @@ class PesertaDidikAktif extends Component
     public $filter_jurusan;
     public $filter_rombel;
     public $result = [];
-    
+    public $file_path;
+    public $file_excel;
+    public $imported_data = [];
+    public $kordinator = [];
+    public $nama_kelas;
+
     public function mount(){
         if($this->loggedUser()->hasRole('wali', session('semester_id'))){
             $this->rombongan_belajar_id = $this->loggedUser()->guru->rombongan_belajar->rombongan_belajar_id;
@@ -120,12 +131,139 @@ class PesertaDidikAktif extends Component
             'breadcrumbs' => [
                 ['link' => "/", 'name' => "Beranda"], ['link' => '#', 'name' => 'Referensi'], ['name' => "Data Peserta Didik Aktif"]
             ],
-            /*'tombol_add' => ($this->rombongan_belajar_id) ? [
-                'wire' => 'sinkronisasi',
-                'link' => '',
-                'color' => 'warning',
-                'text' => 'Sinkronisasi'
-            ] : NULL*/
+            'tombol_add' => [
+                'wire' => 'addModal',
+                'color' => 'primary',
+                'text' => 'Tambah Data',
+            ],
+        ]);
+    }
+    public function addModal(){
+        $this->emit('showModal');
+    }
+    public function updatedFileExcel(){
+        $this->validate(
+            [
+                'file_excel' => 'required|mimes:xlsx',
+            ],
+            [
+                'file_excel.required' => 'File Excel tidak boleh kosong',
+                'file_excel.mimes' => 'File harus berupa file dengan tipe: xlsx.',
+            ]
+        );
+        $this->file_path = $this->file_excel->store('files', 'public');
+        $this->imported_data();
+    }
+    private function imported_data(){
+        $imported_data = (new FastExcel)->import(storage_path('/app/public/'.$this->file_path));
+        $collection = collect($imported_data);
+        $multiplied = $collection->map(function ($items, $key) {
+            foreach($items as $k => $v){
+                $k = str_replace('.','',$k);
+                $k = str_replace(' ','_',$k);
+                $k = str_replace('/','_',$k);
+                $k = strtolower($k);
+                $item[$k] = $v;
+            }
+            return $item;
+        });
+        foreach($multiplied->all() as $urut => $data){
+            $this->nama[$urut] = $data['nama'];
+            // $this->nuptk[$urut] = $data['nuptk'];
+            // $this->nip[$urut] = $data['nip'];
+            $this->nik[$urut] = $data['nik'];
+            $this->jenis_kelamin[$urut] = $data['jenis_kelamin'];
+            // $this->tempat_lahir[$urut] = $data['tempat_lahir'];
+            // $this->tanggal_lahir[$urut] = (is_object($data['tanggal_lahir'])) ? $data['tanggal_lahir']->format('Y-m-d') : now()->format('Y-m-d');
+            // $this->agama[$urut] = $data['agama'];
+            $this->alamat[$urut] = $data['alamat'];
+            $this->rt[$urut] = $data['rt'];
+            $this->rw[$urut] = $data['rw'];
+            $this->desa_kelurahan[$urut] = $data['desa_kelurahan'];
+            $this->kecamatan[$urut] = $data['kecamatan'];
+            $this->kordinator[$urut] = $data['kordinator'];
+            $this->no_hp[$urut] = $data['no_hp'];
+            // $this->email[$urut] = $data['email'];
+        }
+        $this->imported_data = $multiplied->all();
+    }
+    public function store(){
+        $this->emit('show-tooltip');
+        //$this->imported_data();
+        $this->validate(
+            [
+                'nama.*' => 'required',
+                'nik.*' => 'required|numeric|digits:4|unique:peserta_didik,nik',
+                'email.*' => 'required|unique:peserta_didik,email',
+            ],
+            [
+                'nama.*.required' => 'Nama tidak boleh kosong!',
+                'nik.*.required' => 'NIK tidak boleh kosong!',
+                'nik.*.numeric' => 'NIK harus berupa angka!',
+                'nik.*.digits' => 'NIK harus 4 digit!',
+                'email.*.required' => 'Email tidak boleh kosong!',
+                'email.*.unique' => 'Email sudah terdaftar!',
+                'nik.*.unique' => 'NIK sudah terdaftar!',
+            ]
+        );
+        foreach($this->nama as $urut => $nama){
+            // $agama = Agama::where('nama', $this->agama[$urut])->first();
+            $kordinator = Rombongan_belajar::where('nama', $this->kordinator[$urut])->first();
+            // $agama = '1';
+            $anggota_rombel_id = Str::uuid();
+            $peserta_didik_id = Str::uuid();
+            if($kordinator){
+                Peserta_didik::updateOrcreate(
+                    [
+                        'nik' => $this->nik[$urut],
+                    ],
+                    [
+                        'peserta_didik_id' => $peserta_didik_id,
+                        'sekolah_id' => session('sekolah_id'),
+                        // 'status_kepegawaian_id' => 0,
+                        // 'kode_wilayah' => null,
+                        'nama' => $nama,
+                        // 'nuptk' => $this->nuptk[$urut],
+                        // 'nuptk' => null,
+                        // 'nip' => null,
+                        // 'nip' => $this->nip[$urut],
+                        'jenis_kelamin' => $this->jenis_kelamin[$urut],
+                        // 'tanggal_lahir' => null,
+                        // 'tempat_lahir' => null,
+                        // 'tempat_lahir' => $this->tempat_lahir[$urut],
+                        // 'tanggal_lahir' => $this->tanggal_lahir[$urut],
+                        'agama_id' => 1,
+                        'alamat' => $this->alamat[$urut],
+                        'rt' => $this->rt[$urut],
+                        'rw' => $this->rw[$urut],
+                        'desa_kelurahan' => $this->desa_kelurahan[$urut],
+                        'kecamatan' => $this->kecamatan[$urut],
+                        // 'kode_pos' => $this->kodepos[$urut],
+                        // 'kode_pos' => null,
+                        'no_telp' => $this->no_hp[$urut],
+                        // 'email' => $this->email[$urut],
+                        'email' => null,
+                        // 'jenis_ptk_id' => 4,
+                        'last_sync' => now(),
+                    ]
+                );
+                Anggota_rombel::updateOrCreate(
+                    [
+                        'anggota_rombel_id' => $anggota_rombel_id,
+                        'sekolah_id'        => session('sekolah_id'),
+                        'semester_id'       => '20241',
+                        'rombongan_belajar_id'  => $kordinator->rombongan_belajar_id,
+                        'peserta_didik_id'  => $peserta_didik_id,
+                        'last_sync' => now(),
+                    ]
+                );
+            }
+        }
+        $this->reset(['imported_data']);
+        $this->reset(['nama','nik', 'jenis_kelamin', 'alamat', 'rt', 'rw', 'desa_kelurahan', 'kecamatan', 'kode_pos', 'no_hp', 'email']);
+        $this->emit('close-modal');
+        $this->alert('success', 'Berhasil', [
+            'text' => 'Data Alumni berhasil disimpan'
         ]);
     }
     public function kondisi(){
@@ -146,7 +284,7 @@ class PesertaDidikAktif extends Component
         $this->pd_id = $pd_id;
         $this->pd = Peserta_didik::find($this->pd_id);
         $this->nama = $this->pd->nama;
-        $this->nis = $this->pd->no_induk; 
+        $this->nis = $this->pd->no_induk;
         $this->nisn = $this->pd->nisn;
         $this->nik = $this->pd->nik;
         $this->jenis_kelamin = $this->pd->jenis_kelamin;
@@ -303,5 +441,10 @@ class PesertaDidikAktif extends Component
             $this->syncPD($siswa->peserta_didik_id, $siswa->nama);
         }
         $this->emit('progress');
+    }
+    public function getRombel(){
+        $find = Rombongan_belajar::find($this->rombongan_belajar_id);
+        $this->nama_kelas = $find->nama;
+        $this->guru_pengajar = Guru::where('sekolah_id', session('sekolah_id'))->orderBy('nama')->get();
     }
 }
