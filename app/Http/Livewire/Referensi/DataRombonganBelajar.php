@@ -58,18 +58,19 @@ class DataRombonganBelajar extends Component
             $query->where('semester_id', session('semester_aktif'));
             $query->where('sekolah_id', session('sekolah_id'));
         };
-        $this->pengajar = Guru::all();
+        // $this->pengajar = Guru::all();
+        // dd(Rombongan_belajar::all());
         return view('livewire.referensi.data-rombongan-belajar', [
             'collection' => Rombongan_belajar::where($where)->with([
                 'wali_kelas' => function($query){
                     $query->select('guru_id', 'nama');
                 },
-                'jurusan_sp' => function($query){
-                    $query->select('jurusan_sp_id', 'nama_jurusan_sp');
-                },
-                'kurikulum' => function($query){
-                    $query->select('kurikulum_id', 'nama_kurikulum');
-                },
+                // 'jurusan_sp' => function($query){
+                //     $query->select('jurusan_sp_id', 'nama_jurusan_sp');
+                // },
+                // 'kurikulum' => function($query){
+                //     $query->select('kurikulum_id', 'nama_kurikulum');
+                // },
             ])
             ->orderBy($this->sortby, $this->sortbydesc)
             ->orderBy('nama', $this->sortbydesc)
@@ -86,6 +87,7 @@ class DataRombonganBelajar extends Component
                 });
                 $query->where($where);
             })->paginate($this->per_page),
+            'guru_pengajar' => $this->getPengajar(),
             'breadcrumbs' => [
                 ['link' => "/", 'name' => "Beranda"], ['link' => '#', 'name' => 'Referensi'], ['name' => "Data Rombongan Belajar"]
             ],
@@ -98,10 +100,24 @@ class DataRombonganBelajar extends Component
     }
 
     public function tambahModal(){
-        $this->pengajar = Guru::all();
         $this->emit('tambahModal');
     }
-
+    public function store(){
+        Rombongan_belajar::create([
+            'rombongan_belajar_id' => Str::uuid(),
+            'sekolah_id'        => session('sekolah_id'),
+            'semester_id'       => '20241',
+            'nama'		        => $this->nama_kelas,
+            'guru_id'           => $this->pengajar,
+            'ptk_id'           => $this->pengajar,
+            'jenis_rombel'		=> 1,
+            'last_sync'			=> now(),
+        ]);
+        $this->alert('success', 'Berhasil', [
+            'text' => 'Data Rombel berhasil disimpan!'
+        ]);
+        $this->emit('close-modal');
+    }
     public function getAnggota($rombongan_belajar_id){
         $this->rombongan_belajar_id = $rombongan_belajar_id;
         $this->anggota_rombel = Peserta_didik::with(['anggota_rombel' => function($query) use ($rombongan_belajar_id){
@@ -272,4 +288,5 @@ class DataRombonganBelajar extends Component
             ]);
         }
     }
+
 }
