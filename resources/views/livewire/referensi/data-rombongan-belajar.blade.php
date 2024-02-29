@@ -9,11 +9,12 @@
                         <thead>
                             <tr>
                                 <th class="text-center align-middle">Nama</th>
-                                <th class="text-center align-middle">Wali Kelas</th>
-                                <th class="text-center align-middle">Tingkat</th>
+                                <th class="text-center align-middle">Ketua</th>
+                                {{-- <th class="text-center align-middle">Tingkat</th> --}}
                                 {{-- <th class="text-center align-middle">Program/Kompetensi Keahlian</th> --}}
                                 {{-- <th class="text-center align-middle">Kurikulum</th> --}}
-                                <th class="text-center align-middle">Anggota Rombel</th>
+                                <th class="text-center align-middle">Jumlah</th>
+                                <th class="text-center align-middle">Anggota</th>
                                 {{-- <th class="text-center align-middle">Pembelajaran</th> --}}
                             </tr>
                         </thead>
@@ -23,9 +24,9 @@
                                 <tr>
                                     <td>{{$item->nama}}</td>
                                     <td>{{$item->wali_kelas->nama_lengkap}}</td>
-                                    <td class="text-center">{{$item->tingkat}}</td>
+                                    {{-- <td class="text-center">{{$item->tingkat}}</td> --}}
                                     {{-- <td>{{($item->jurusan_sp) ? $item->jurusan_sp->nama_jurusan_sp : '-'}}</td> --}}
-                                    {{-- <td>{{$item->kurikulum->nama_kurikulum}}</td> --}}
+                                    <td class="text-center">{{$item->anggota_rombel->count()}}</td>
                                     <td>
                                         <div class="text-center">
                                             <button type="button" class="btn btn-sm btn-success waves-effect waves-float waves-light" data-bs-toggle="modal" data-bs-target="#anggotaRombelModal" wire:click="getAnggota('{{$item->rombongan_belajar_id}}')">Anggota Rombel</button>
