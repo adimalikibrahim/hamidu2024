@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Setting;
 use App\Models\Status_penilaian;
-use Config;
+// use Config;
+use Illuminate\Support\Facades\Config;
 
 class GetSetting
 {

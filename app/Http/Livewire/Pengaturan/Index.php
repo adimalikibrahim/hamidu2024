@@ -12,8 +12,8 @@ use App\Models\Setting;
 use App\Models\Rombongan_belajar;
 use App\Models\Rombel_empat_tahun;
 use Carbon\Carbon;
-use Config;
-use File;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\File;
 
 class Index extends Component
 {
@@ -93,9 +93,9 @@ class Index extends Component
     }
     public function render()
     {
-        $this->data_semester = Semester::whereHas('tahun_ajaran', function($query){
-            $query->where('periode_aktif', 1);
-        })->orderBy('semester_id', 'DESC')->get();
+        // $this->data_semester = Semester::whereHas('tahun_ajaran', function($query){
+        //     $query->where('periode_aktif', 1);
+        // })->orderBy('semester_id', 'DESC')->get();
         return view('livewire.pengaturan.index', [
             'breadcrumbs' => [
                 ['link' => "/", 'name' => "Beranda"], ['link' => '#', 'name' => 'Pengaturan'], ['name' => "Pengaturan Umum"]

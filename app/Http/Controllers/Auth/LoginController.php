@@ -13,7 +13,9 @@ use App\Models\Mst_wilayah;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Team;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+// use Validator;
+
 
 class LoginController extends Controller
 {
@@ -96,7 +98,7 @@ class LoginController extends Controller
 		}*/
         $fieldType = 'email';
 		if (auth()->attempt([$fieldType => $request->email, 'password' => $request->password])) {
-            $semester = Semester::where('semester_id', '20241')->first();
+            $semester = Semester::where('periode_aktif', 1)->first();
             $request->session()->put('semester_id', $semester->nama);
             $request->session()->put('semester_aktif', $semester->semester_id);
             $sekolah_id = (auth()->user()->sekolah_id) ? auth()->user()->sekolah_id : NULL;

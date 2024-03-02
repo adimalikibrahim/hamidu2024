@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Lavary\Menu\Facade as Menu;
 
 class GenerateMenus
 {
@@ -19,31 +20,31 @@ class GenerateMenus
     {
         //$menu->add($a['text'], $a['url'])->id($a['id'])->data(['role' => $a['role'], 'smt' => $a['smt'], 'cara_penilaian' => $a['cara_penilaian']])->append($this->setAppend())->prepend($this->icon($a['icon']))->link->attr($a['attr']);
         // $menu->{Str::camel(Str::ascii($a['text']))}->add($submenu['text'], ['url' => $submenu['url'], 'parent' => $menu->{$submenu['id']}->id])->data(['role' => $submenu['role'], 'smt' => $submenu['smt'], 'cara_penilaian' => $submenu['cara_penilaian']])->append($this->setAppend())->prepend($this->icon($submenu['icon']))->link->attr($submenu['attr']);
-        \Menu::make('MyNavBar', function($menu){
+        Menu::make('MyNavBar', function($menu){
             $menu->add('Beranda',     ['route'  => 'index'])->data([
                 'role' => ['admin', 'guru', 'siswa', 'tu'],
                 'smt' => collect([1,2]),
                 'cara_penilaian' => collect(['lengkap', 'sederhana'])
             ])->append($this->setAppend())->prepend($this->icon('home'))->link->attr($this->text_class());
-            // $menu->group([], function($menu){
-            //     $menu->add('Sinkronisasi', 'javascript:void(0)')->data([
-            //         'role' => ['admin'],
-            //         'smt' => collect([1,2]),
-            //         'cara_penilaian' => collect(['lengkap', 'sederhana'])
-            //     ])->append($this->setAppend())->prepend($this->icon('refresh'))->nickname('sinkronisasi')->link->attr($this->text_class());
-            //     $menu->group(['prefix' => 'sinkronisasi'], function($menu){
-            //         $menu->sinkronisasi->add('Dapodik', 'dapodik')->data([
-            //             'role' => ['admin'],
-            //             'smt' => collect([1,2]),
-            //             'cara_penilaian' => collect(['lengkap', 'sederhana'])
-            //         ])->append($this->setAppend())->prepend($this->icon('download'))->link->attr($this->text_class());
-            //         $menu->sinkronisasi->add('e-Rapor', 'erapor')->data([
-            //             'role' => ['admin'],
-            //             'smt' => collect([1,2]),
-            //             'cara_penilaian' => collect(['lengkap', 'sederhana'])
-            //         ])->append($this->setAppend())->prepend($this->icon('upload'))->link->attr($this->text_class());
-            //     });
-            // });
+                // $menu->group([], function($menu){
+                //     $menu->add('Sinkronisasi', 'javascript:void(0)')->data([
+                //         'role' => ['admin'],
+                //         'smt' => collect([1,2]),
+                //         'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                //     ])->append($this->setAppend())->prepend($this->icon('refresh'))->nickname('sinkronisasi')->link->attr($this->text_class());
+                //     $menu->group(['prefix' => 'sinkronisasi'], function($menu){
+                //         $menu->sinkronisasi->add('Dapodik', 'dapodik')->data([
+                //             'role' => ['admin'],
+                //             'smt' => collect([1,2]),
+                //             'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                //         ])->append($this->setAppend())->prepend($this->icon('download'))->link->attr($this->text_class());
+                //         $menu->sinkronisasi->add('e-Rapor', 'erapor')->data([
+                //             'role' => ['admin'],
+                //             'smt' => collect([1,2]),
+                //             'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                //         ])->append($this->setAppend())->prepend($this->icon('upload'))->link->attr($this->text_class());
+                //     });
+                // });
             $menu->group([], function($menu){
                 $menu->add('Pengaturan', 'javascript:void(0)')->data([
                     'role' => ['admin'],
@@ -70,18 +71,18 @@ class GenerateMenus
                     'cara_penilaian' => collect(['lengkap', 'sederhana'])
                 ])->append($this->setAppend())->prepend($this->icon('list'))->nickname('referensi')->link->attr($this->text_class());
                 $menu->group([], function($menu){
-                    $menu->referensi->add('Referensi GTK', 'javascript:void(0)')->data([
+                    $menu->referensi->add('Pengurus Pusat', 'javascript:void(0)')->data([
                         'role' => ['admin', 'tu'],
                         'smt' => collect([1,2]),
                         'cara_penilaian' => collect(['lengkap', 'sederhana'])
                     ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->nickname('referensi_gtk')->link->attr($this->text_class());
                     $menu->group([], function($menu){
-                        $menu->referensi_gtk->add('Guru', 'guru')->data([
+                        $menu->referensi_gtk->add('Dewan Kyai', 'tendik')->data([
                             'role' => ['admin', 'tu'],
                             'smt' => collect([1,2]),
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
                         ])->append($this->setAppend())->prepend($this->icon('graduation-cap'))->link->attr($this->text_class());
-                        $menu->referensi_gtk->add('Tendik', 'tendik')->data([
+                        $menu->referensi_gtk->add('Pengurus', 'guru')->data([
                             'role' => ['admin', 'tu'],
                             'smt' => collect([1,2]),
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
@@ -91,41 +92,41 @@ class GenerateMenus
                             'smt' => collect([1,2]),
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
                         ])->append($this->setAppend())->prepend($this->icon('graduation-cap'))->link->attr($this->text_class());
-                        $menu->referensi_gtk->add('Asesor', 'asesor')->data([
-                            'role' => ['admin', 'tu'],
-                            'smt' => collect([1,2]),
-                            'cara_penilaian' => collect(['lengkap', 'sederhana'])
-                        ])->append($this->setAppend())->prepend($this->icon('graduation-cap'))->link->attr($this->text_class());
+                        // $menu->referensi_gtk->add('Asesor', 'asesor')->data([
+                        //     'role' => ['admin', 'tu'],
+                        //     'smt' => collect([1,2]),
+                        //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                        // ])->append($this->setAppend())->prepend($this->icon('graduation-cap'))->link->attr($this->text_class());
                     });
-                    $menu->referensi->add('Rombongan Belajar', 'javascript:void(0)')->data([
+                    $menu->referensi->add('Kordinator', 'javascript:void(0)')->data([
                         'role' => ['admin', 'waka', 'tu'],
                         'smt' => collect([1,2]),
                         'cara_penilaian' => collect(['lengkap', 'sederhana'])
                     ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->nickname('rombel')->link->attr($this->text_class());
                     $menu->group([], function($menu){
-                        $menu->rombel->add('Reguler', 'rombongan-belajar')->data([
+                        $menu->rombel->add('Kordinator', 'rombongan-belajar')->data([
                             'role' => ['admin', 'waka', 'tu'],
                             'smt' => collect([1,2]),
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
                         ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
-                        $menu->rombel->add('Matpel Pilihan', 'rombel-pilihan')->data([
-                            'role' => ['admin', 'waka', 'tu'],
-                            'smt' => collect([1,2]),
-                            'cara_penilaian' => collect(['lengkap', 'sederhana'])
-                        ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
+                        // $menu->rombel->add('Matpel Pilihan', 'rombel-pilihan')->data([
+                        //     'role' => ['admin', 'waka', 'tu'],
+                        //     'smt' => collect([1,2]),
+                        //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                        // ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
                     });
-                    $menu->referensi->add('Peserta Didik', 'javascript:void(0)')->data([
+                    $menu->referensi->add('Alumni', 'javascript:void(0)')->data([
                         'role' => ['admin', 'guru', 'tu'],
                         'smt' => collect([1,2]),
                         'cara_penilaian' => collect(['lengkap', 'sederhana'])
                     ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->nickname('pd')->link->attr($this->text_class());
                     $menu->group([], function($menu){
-                        $menu->pd->add('Peserta Didik Aktif', 'peserta-didik-aktif')->data([
+                        $menu->pd->add('Hamidu Aktif', 'peserta-didik-aktif')->data([
                             'role' => ['admin', 'guru', 'tu'],
                             'smt' => collect([1,2]),
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
                         ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
-                        $menu->pd->add('Peserta Didik Keluar', 'peserta-didik-keluar')->data([
+                        $menu->pd->add('Hamidu Keluar', 'peserta-didik-keluar')->data([
                             'role' => ['admin', 'tu'],
                             'smt' => collect([1,2]),
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
@@ -136,16 +137,16 @@ class GenerateMenus
                             'cara_penilaian' => collect(['lengkap', 'sederhana'])
                         ])->append($this->setAppend())->prepend($this->icon('users'))->link->attr($this->text_class());
                     });
-                    $menu->referensi->add('Mata Pelajaran', 'mata-pelajaran')->data([
-                        'role' => ['admin'],
-                        'smt' => collect([1,2]),
-                        'cara_penilaian' => collect(['lengkap', 'sederhana'])
-                    ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
-                    $menu->referensi->add('Ekstrakurikuler', 'ekstrakurikuler')->data([
-                        'role' => ['admin'],
-                        'smt' => collect([1,2]),
-                        'cara_penilaian' => collect(['lengkap', 'sederhana'])
-                    ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
+                    // $menu->referensi->add('Mata Pelajaran', 'mata-pelajaran')->data([
+                    //     'role' => ['admin'],
+                    //     'smt' => collect([1,2]),
+                    //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                    // ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
+                    // $menu->referensi->add('Ekstrakurikuler', 'ekstrakurikuler')->data([
+                    //     'role' => ['admin'],
+                    //     'smt' => collect([1,2]),
+                    //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                    // ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
                     /*$menu->referensi->add('Teknik Penilaian', 'teknik-penilaian')->data([
                         'role' => ['admin'],
                         'smt' => collect([1,2]),
@@ -176,11 +177,11 @@ class GenerateMenus
                         'smt' => collect([1,2]),
                         'cara_penilaian' => collect(['lengkap', 'sederhana'])
                     ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
-                    $menu->referensi->add('DUDI', 'dudi')->data([
-                        'role' => ['admin'],
-                        'smt' => collect([1,2]),
-                        'cara_penilaian' => collect(['lengkap', 'sederhana'])
-                    ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
+                    // $menu->referensi->add('DUDI', 'dudi')->data([
+                    //     'role' => ['admin'],
+                    //     'smt' => collect([1,2]),
+                    //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+                    // ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
                 });
             });
             $menu->group([], function($menu){
@@ -257,11 +258,11 @@ class GenerateMenus
                     ])->append($this->setAppend())->prepend($this->icon('hand-point-right'))->link->attr($this->text_class());
                 });
             });
-            $menu->add('Nilai Ekstrakurikuler', 'penilaian/ekstrakurikuler')->data([
-                'role' => ['pembina_ekskul'],
-                'smt' => collect([1,2]),
-                'cara_penilaian' => collect(['sederhana'])
-            ])->append($this->setAppend())->prepend($this->icon('user-pen'))->link->attr($this->text_class());
+            // $menu->add('Nilai Ekstrakurikuler', 'penilaian/ekstrakurikuler')->data([
+            //     'role' => ['pembina_ekskul'],
+            //     'smt' => collect([1,2]),
+            //     'cara_penilaian' => collect(['sederhana'])
+            // ])->append($this->setAppend())->prepend($this->icon('user-pen'))->link->attr($this->text_class());
             /*$menu->add('Nilai UKK', 'penilaian/ukk')->data([
                 'role' => ['internal'],
                 'smt' => collect([1,2]),
@@ -553,21 +554,21 @@ class GenerateMenus
                 'smt' => collect([1,2]),
                 'cara_penilaian' => collect(['lengkap', 'sederhana'])
             ])->append($this->setAppend())->prepend($this->icon('user'))->link->attr($this->text_class());
-            $menu->add('Pusat Unduhan', 'unduhan')->data([
-                'role' => ['admin', 'guru', 'siswa', 'tu'],
-                'smt' => collect([1,2]),
-                'cara_penilaian' => collect(['lengkap', 'sederhana'])
-            ])->append($this->setAppend())->prepend($this->icon('download'))->link->attr($this->text_class());
-            $menu->add('Daftar Perubahan', 'changelog')->data([
-                'role' => ['admin'],
-                'smt' => collect([1,2]),
-                'cara_penilaian' => collect(['lengkap', 'sederhana'])
-            ])->append($this->setAppend())->prepend($this->icon('laptop-code'))->link->attr($this->text_class());
-            $menu->add('Cek Pembaharuan', 'check-update')->data([
-                'role' => ['admin'],
-                'smt' => collect([1,2]),
-                'cara_penilaian' => collect(['lengkap', 'sederhana'])
-            ])->append($this->setAppend())->prepend($this->icon('terminal'))->link->attr($this->text_class());
+            // $menu->add('Pusat Unduhan', 'unduhan')->data([
+            //     'role' => ['admin', 'guru', 'siswa', 'tu'],
+            //     'smt' => collect([1,2]),
+            //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+            // ])->append($this->setAppend())->prepend($this->icon('download'))->link->attr($this->text_class());
+            // $menu->add('Daftar Perubahan', 'changelog')->data([
+            //     'role' => ['admin'],
+            //     'smt' => collect([1,2]),
+            //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+            // ])->append($this->setAppend())->prepend($this->icon('laptop-code'))->link->attr($this->text_class());
+            // $menu->add('Cek Pembaharuan', 'check-update')->data([
+            //     'role' => ['admin'],
+            //     'smt' => collect([1,2]),
+            //     'cara_penilaian' => collect(['lengkap', 'sederhana'])
+            // ])->append($this->setAppend())->prepend($this->icon('terminal'))->link->attr($this->text_class());
             $menu->add('Keluar Aplikasi', ['url'  => 'logout'])->data([
                 'role' => ['admin', 'guru', 'siswa', 'tu'],
                 'smt' => collect([1,2]),
@@ -580,8 +581,7 @@ class GenerateMenus
             $cara_penilaian = 'sederhana';
             if($cara_penilaian && $item->data('cara_penilaian')){
                 if(
-                    $user
-                    && $user->hasRole( $item->data('role'), $semester)
+                    $user && $user->hasRole( $item->data('role'), $semester)
                     && $item->data('smt')->contains($semester_aktif)
                     && $item->data('cara_penilaian')->contains($cara_penilaian)
                 )
