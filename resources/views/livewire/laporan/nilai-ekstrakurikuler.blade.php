@@ -6,7 +6,7 @@
                 @role('waka', session('semester_id'))
                     @include('livewire.formulir-waka')
                 @endrole
-                @if($show)
+                @if ($show)
                     @include('livewire.laporan.nilai-ekstrakurikuler-pd')
                 @endif
             </div>

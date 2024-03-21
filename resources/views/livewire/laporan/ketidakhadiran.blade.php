@@ -5,13 +5,13 @@
             <form wire:ignore.self wire:submit.prevent="store">
                 <div class="card-body">
                     @role(['waka', 'tu'], session('semester_id'))
-                    @include('livewire.formulir-waka')
+                        @include('livewire.formulir-waka')
                     @endrole
-                    @if($show)
-                    @include('livewire.laporan.ketidakhadiran-pd')
+                    @if ($show)
+                        @include('livewire.laporan.ketidakhadiran-pd')
                     @endif
                 </div>
-                <div class="card-footer{{($form) ? '' : ' d-none'}}">
+                <div class="card-footer{{ $form ? '' : ' d-none' }}">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>

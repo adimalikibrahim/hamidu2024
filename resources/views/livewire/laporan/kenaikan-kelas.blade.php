@@ -5,16 +5,16 @@
             <form wire:ignore.self wire:submit.prevent="store">
                 <div class="card-body">
                     @role('waka', session('semester_id'))
-                    @if($show)
-                        @include('livewire.laporan.kenaikan-kelas-pd')
-                    @endif
+                        @if ($show)
+                            @include('livewire.laporan.kenaikan-kelas-pd')
+                        @endif
                     @else
-                    @if($show)
-                        @include('livewire.laporan.kenaikan-kelas-pd')
-                    @endif
+                        @if ($show)
+                            @include('livewire.laporan.kenaikan-kelas-pd')
+                        @endif
                     @endrole
                 </div>
-                <div class="card-footer{{($form) ? '' : ' d-none'}}">
+                <div class="card-footer{{ $form ? '' : ' d-none' }}">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </form>

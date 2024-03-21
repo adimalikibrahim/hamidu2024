@@ -6,7 +6,7 @@
                 @role('waka', session('semester_id'))
                     @include('livewire.formulir-waka')
                 @endrole
-                @if($show)
+                @if ($show)
                     @include('livewire.laporan.rapor-semester-pd')
                 @endif
             </div>
@@ -16,9 +16,9 @@
     @include('components.loader')
 </div>
 @push('scripts')
-<script>
-    Livewire.on('preview-nilai', event => {
-        $('#reviewModal').modal('show')
-    })
-</script>
+    <script>
+        Livewire.on('preview-nilai', event => {
+            $('#reviewModal').modal('show')
+        })
+    </script>
 @endpush
